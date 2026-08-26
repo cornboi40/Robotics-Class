@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Coding Class - Admin</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="top-bar">
+
+        <div>
+            <h1>Coding Class</h1>
+            <p>Admin Panel</p>
+        </div>
+
+        <a href="index.html" class="admin-button">
+            Student View
+        </a>
+
+    </header>
+
+
+    <main class="container">
+
+        <div class="admin-layout">
+
+
+            <!-- =========================
+                 CLASS SIDEBAR
+            ========================== -->
+
+            <aside class="admin-sidebar">
+
+                <h2>Classes</h2>
+
+                <div id="admin-class-list">
+                    <!-- JavaScript creates classes here -->
+                </div>
+
+                <button
+                    class="add-class"
+                    onclick="addClass()"
+                >
+                    + Add Class
+                </button>
+
+            </aside>
+
+
+            <!-- =========================
+                 EDITOR
+            ========================== -->
+
+            <section class="editor">
+
+                <div class="editor-header">
+
+                    <div>
+
+                        <span
+                            id="editor-class-number"
+                            class="class-number"
+                        >
+                            CLASS 1
+                        </span>
+
+                        <h2>Edit Lesson</h2>
+
+                    </div>
+
+                    <span
+                        id="save-status"
+                        class="status"
+                    >
+                        Saved
+                    </span>
+
+                </div>
+
+
+                <!-- Class Name -->
+
+                <label for="class-name">
+                    Class Name
+                </label>
+
+                <input
+                    type="text"
+                    id="class-name"
+                    placeholder="Class 1"
+                >
+
+
+                <!-- Lesson Title -->
+
+                <label for="lesson-title">
+                    Lesson Title
+                </label>
+
+                <input
+                    type="text"
+                    id="lesson-title"
+                    placeholder="Lesson title"
+                >
+
+
+                <!-- Description -->
+
+                <label for="lesson-description">
+                    Lesson Description
+                </label>
+
+                <textarea
+                    id="lesson-description"
+                    rows="4"
+                    placeholder="Short description of the lesson..."
+                ></textarea>
+
+
+                <!-- Main Content -->
+
+                <label for="lesson-content">
+                    Lesson Content
+                </label>
+
+                <textarea
+                    id="lesson-content"
+                    rows="8"
+                    placeholder="Write the lesson here..."
+                ></textarea>
+
+
+                <!-- Code -->
+
+                <label for="lesson-code">
+                    Code
+                </label>
+
+                <textarea
+                    id="lesson-code"
+                    class="code-editor"
+                    rows="12"
+                    placeholder="Write your code here..."
+                ></textarea>
+
+
+                <!-- Challenge -->
+
+                <label for="lesson-challenge">
+                    Challenge
+                </label>
+
+                <textarea
+                    id="lesson-challenge"
+                    rows="5"
+                    placeholder="Write the student challenge..."
+                ></textarea>
+
+
+                <!-- Buttons -->
+
+                <div class="editor-buttons">
+
+                    <button
+                        class="save-button"
+                        onclick="saveLesson()"
+                    >
+                        Save Lesson
+                    </button>
+
+
+                    <button
+                        class="preview-button"
+                        onclick="previewLesson()"
+                    >
+                        Preview
+                    </button>
+
+
+                    <button
+                        class="delete-button"
+                        onclick="deleteClass()"
+                    >
+                        Delete Class
+                    </button>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <footer>
+        <p>Coding Class Admin Panel</p>
+    </footer>
+
+
+      <script src="script.js"></script>
+
+</body>
+
+</html>

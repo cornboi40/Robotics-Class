@@ -1,0 +1,616 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+    min-height: 100vh;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.top-bar {
+    background: #1f2937;
+    color: white;
+
+    padding: 20px 40px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.top-bar h1 {
+    font-size: 26px;
+    margin-bottom: 4px;
+}
+
+
+.top-bar p {
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+
+.admin-button {
+    background: white;
+    color: #1f2937;
+
+    text-decoration: none;
+
+    padding: 10px 18px;
+
+    border-radius: 6px;
+
+    font-weight: bold;
+}
+
+
+.admin-button:hover {
+    background: #e5e7eb;
+}
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.container {
+    width: min(1100px, 92%);
+    margin: 35px auto;
+}
+
+
+/* =========================
+   STUDENT TABS
+========================= */
+
+.tabs {
+    display: flex;
+    gap: 5px;
+
+    border-bottom: 2px solid #d1d5db;
+
+    margin-bottom: 25px;
+}
+
+
+.tab {
+    background: #e5e7eb;
+
+    border: none;
+
+    padding: 13px 25px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    border-radius: 6px 6px 0 0;
+}
+
+
+.tab:hover {
+    background: #d1d5db;
+}
+
+
+.tab.active {
+    background: #2563eb;
+    color: white;
+}
+
+
+/* =========================
+   LESSON
+========================= */
+
+.lesson {
+    display: none;
+
+    background: white;
+
+    padding: 35px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+.lesson.active {
+    display: block;
+}
+
+
+.lesson-header {
+    border-bottom: 1px solid #e5e7eb;
+
+    padding-bottom: 20px;
+
+    margin-bottom: 25px;
+}
+
+
+.lesson-header h2 {
+    font-size: 30px;
+
+    margin: 8px 0;
+}
+
+
+.lesson-header p {
+    color: #64748b;
+}
+
+
+.class-number {
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    color: #2563eb;
+}
+
+
+.lesson-section {
+    margin-bottom: 30px;
+}
+
+
+.lesson-section h3 {
+    margin-bottom: 12px;
+
+    font-size: 20px;
+}
+
+
+.lesson-section p,
+.lesson-section li {
+    line-height: 1.7;
+}
+
+
+.lesson-section ol {
+    padding-left: 25px;
+}
+
+
+/* =========================
+   CODE
+========================= */
+
+.code-container {
+    position: relative;
+
+    background: #111827;
+
+    border-radius: 7px;
+
+    overflow: hidden;
+
+    margin-top: 10px;
+}
+
+
+.code-container pre {
+    padding: 25px;
+
+    overflow-x: auto;
+
+    color: #e5e7eb;
+
+    font-family: Consolas, "Courier New", monospace;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+.copy-button {
+    position: absolute;
+
+    right: 10px;
+    top: 10px;
+
+    border: none;
+
+    background: #374151;
+
+    color: white;
+
+    padding: 7px 12px;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+}
+
+
+.copy-button:hover {
+    background: #4b5563;
+}
+
+
+/* =========================
+   ADMIN
+========================= */
+
+.admin-layout {
+    display: grid;
+
+    grid-template-columns: 220px 1fr;
+
+    gap: 25px;
+}
+
+
+.admin-sidebar {
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    height: fit-content;
+}
+
+
+.admin-sidebar h2 {
+    margin-bottom: 15px;
+}
+
+
+.admin-class,
+.add-class {
+    width: 100%;
+
+    padding: 12px;
+
+    margin-bottom: 8px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+
+.admin-class {
+    background: #f1f5f9;
+}
+
+
+.admin-class:hover {
+    background: #e2e8f0;
+}
+
+
+.admin-class.active {
+    background: #2563eb;
+
+    color: white;
+}
+
+
+.add-class {
+    background: white;
+
+    border: 2px dashed #cbd5e1;
+
+    color: #475569;
+
+    text-align: center;
+
+    margin-top: 10px;
+}
+
+
+.add-class:hover {
+    background: #f8fafc;
+}
+
+
+/* =========================
+   EDITOR
+========================= */
+
+.editor {
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+.editor-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+.editor-header h2 {
+    margin-top: 5px;
+}
+
+
+.status {
+    background: #fef3c7;
+
+    color: #92400e;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+}
+
+
+.editor label {
+    display: block;
+
+    font-weight: bold;
+
+    margin-top: 20px;
+
+    margin-bottom: 7px;
+}
+
+
+.editor input,
+.editor textarea {
+    width: 100%;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 5px;
+
+    padding: 12px;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 14px;
+
+    resize: vertical;
+}
+
+
+.editor input:focus,
+.editor textarea:focus {
+    outline: none;
+
+    border-color: #2563eb;
+}
+
+
+.editor .code-editor {
+    font-family: Consolas, "Courier New", monospace;
+
+    background: #111827;
+
+    color: #e5e7eb;
+
+    line-height: 1.5;
+}
+
+
+.editor-buttons {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+
+.save-button,
+.preview-button {
+    border: none;
+
+    padding: 12px 22px;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+
+.save-button {
+    background: #2563eb;
+
+    color: white;
+}
+
+
+.save-button:hover {
+    background: #1d4ed8;
+}
+
+
+.preview-button {
+    background: #e5e7eb;
+
+    color: #1f2937;
+}
+
+
+.preview-button:hover {
+    background: #d1d5db;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    text-align: center;
+
+    padding: 25px;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .top-bar {
+        padding: 15px 20px;
+    }
+
+
+    .top-bar h1 {
+        font-size: 21px;
+    }
+
+
+    .container {
+        width: 94%;
+
+        margin: 20px auto;
+    }
+
+
+    .tabs {
+        overflow-x: auto;
+    }
+
+
+    .tab {
+        white-space: nowrap;
+    }
+
+
+    .lesson {
+        padding: 22px;
+    }
+
+
+    .lesson-header h2 {
+        font-size: 24px;
+    }
+
+
+    .admin-layout {
+        grid-template-columns: 1fr;
+    }
+
+
+    .admin-sidebar {
+        display: flex;
+
+        gap: 8px;
+
+        overflow-x: auto;
+
+        padding: 12px;
+    }
+
+
+    .admin-sidebar h2 {
+        display: none;
+    }
+
+
+    .admin-class,
+    .add-class {
+        width: auto;
+
+        white-space: nowrap;
+
+        margin: 0;
+    }
+/* =========================
+   DELETE BUTTON
+========================= */
+
+.delete-button {
+    background: #dc2626;
+
+    color: white;
+
+    border: none;
+
+    padding: 12px 22px;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+
+.delete-button:hover {
+    background: #b91c1c;
+}
+
+
+/* =========================
+   ADMIN CLASS LIST
+========================= */
+
+#admin-class-list {
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+/* =========================
+   EMPTY STUDENT PAGE
+========================= */
+
+#student-tabs:empty {
+    display: none;
+}
+
+
+/* =========================
+   BETTER TEXT SPACING
+========================= */
+
+.lesson-section p {
+    white-space: normal;
+}
+}
