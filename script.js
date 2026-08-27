@@ -1,22 +1,68 @@
 /* =========================================================
    CODING CLASS WEBSITE
-   PHASE 2 / 3 LOCAL VERSION
+   FIREBASE / FIRESTORE VERSION
 
-   Designed for:
-   - Notepad
-   - HTML files
-   - CSS files
-   - JavaScript files
-   - No VS Code
-   - No modules
-   - No Firebase yet
-
-   Data is saved using localStorage.
+   This version:
+   - Uses Firebase Firestore
+   - Works with normal Notepad HTML/JS files
+   - Syncs data between devices
+   - Keeps the existing admin buttons
+   - Automatically creates the first 6 weeks
 ========================================================= */
 
 
 /* =========================================================
-   DEFAULT CLASSES
+   FIREBASE CONFIGURATION
+========================================================= */
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyATTYX8nB_urkLfMpq4cvON0zYZ3kogYYc",
+
+    authDomain:
+        "robotics-class-fc0f6.firebaseapp.com",
+
+    projectId:
+        "robotics-class-fc0f6",
+
+    storageBucket:
+        "robotics-class-fc0f6.firebasestorage.app",
+
+    messagingSenderId:
+        "16573968773",
+
+    appId:
+        "1:16573968773:web:65036fe8b2098604a5d4ec",
+
+    measurementId:
+        "G-M09HG2G047"
+
+};
+
+
+/* =========================================================
+   INITIALIZE FIREBASE
+========================================================= */
+
+firebase.initializeApp(
+    firebaseConfig
+);
+
+
+const db =
+    firebase.firestore();
+
+
+/* =========================================================
+   DATABASE SETTINGS
+========================================================= */
+
+const LESSONS_COLLECTION =
+    "lessons";
+
+
+/* =========================================================
+   DEFAULT SIX WEEKS
 ========================================================= */
 
 const defaultClasses = [
@@ -24,39 +70,62 @@ const defaultClasses = [
     {
         id: 1,
 
-        name: "Class 1",
+        name: "Week 1",
 
-        title: "Introduction to Python",
+        title:
+            "Introduction to Python & Robot Movement",
 
         description:
-            "Getting started with basic Python syntax.",
+            "Learn the basics of Python programming and use simple commands to control the robot.",
 
         content:
-            "Today we are learning the basic structure of a Python program and how to give instructions to the robot.",
+`Welcome to the coding class!
+
+Today we will learn the basic structure of Python commands and how we can use code to control a robot.
+
+A computer follows instructions exactly as they are written. This means that the spelling, capital letters, brackets and commas in our code are important.
+
+We will start with simple robot movement commands. We can tell the robot to move forward or turn by giving it a distance or angle.
+
+Remember that Python is case-sensitive. This means that uppercase and lowercase letters are treated differently.
+
+The goal for today is to become comfortable with typing simple commands and understanding how each command affects the robot.`,
 
         code:
 `bot.move_forward(20, "cm")
-bot.turn_right(90, "deg")`,
+bot.turn_right(90, "deg")
+bot.move_forward(20, "cm")`,
 
         challenge:
 `1. Make the robot move forward 30 cm.
-2. Make the robot turn left.
-3. Try combining multiple commands.`
+2. Make the robot turn right 90 degrees.
+3. Make the robot move forward another 30 cm.
+4. Try combining several movement commands to create your own path.`
+
     },
 
 
     {
         id: 2,
 
-        name: "Class 2",
+        name: "Week 2",
 
-        title: "Robot Movement",
+        title:
+            "Controlling Speed and Timing",
 
         description:
-            "Learning how to control the robot's movement.",
+            "Learn how to control the robot's motors, speed and movement time using Python.",
 
         content:
-            "We will learn how to control the robot's speed, movement and timing.",
+`Today we will learn how to control the robot using its motors.
+
+Instead of only telling the robot how far to move, we can control how fast its motors run and how long they remain switched on.
+
+The speed of the motors affects how quickly the robot moves. We can also use a wait command to make the program pause for a specific amount of time.
+
+Programming a robot is about giving it a clear sequence of instructions. The robot will follow these instructions in the order that we write them.
+
+Pay attention to the values used for speed and time. Small changes can produce very different robot movements.`,
 
         code:
 `bot.motors_on(50, 50)
@@ -64,30 +133,198 @@ bot.wait(2.5)
 bot.motors_off()`,
 
         challenge:
-            "Try making the robot travel forward for 5 seconds before stopping."
+`1. Make the robot move at 30% speed for 3 seconds.
+2. Try increasing the speed to 50%.
+3. Make the robot stop after moving.
+4. Experiment with different times and observe how far the robot travels.`
+
     },
 
 
     {
         id: 3,
 
-        name: "Class 3",
+        name: "Week 3",
 
-        title: "Loops",
+        title:
+            "Loops and Repetition",
 
         description:
-            "Using loops to repeat instructions.",
+            "Learn how to use loops to repeat instructions without writing the same code multiple times.",
 
         content:
-            "Instead of writing the same command repeatedly, we can use a loop.",
+`Today we will learn about loops.
+
+A loop allows us to repeat a set of instructions several times. This is useful when we want a robot to perform the same action repeatedly.
+
+Without a loop, we would have to write the same commands over and over again. With a loop, we can tell Python how many times we want the instructions to be repeated.
+
+Python uses indentation to show which instructions belong inside a loop. Make sure that the instructions inside the loop are properly indented.
+
+Loops are one of the most useful tools in programming because they allow us to create more complicated behaviour using fewer lines of code.`,
 
         code:
-`for i in range(5):
+`for i in range(4):
     bot.move_forward(20, "cm")
     bot.turn_right(90, "deg")`,
 
         challenge:
-            "Change the loop so that the robot performs the movement 10 times."
+`1. Change the loop so the robot repeats the movement 6 times.
+2. Try changing the distance from 20 cm to 30 cm.
+3. Create a program that makes the robot travel in a square.
+4. Try creating another shape using a loop.`
+
+    },
+
+
+    {
+        id: 4,
+
+        name: "Week 4",
+
+        title:
+            "Variables and Console Output",
+
+        description:
+            "Learn how to store information in variables and display information using the console.",
+
+        content:
+`Today we will learn about variables.
+
+A variable is a name that we can use to store information. For example, instead of writing the number 40 every time we want to use a speed, we can store it in a variable called base_speed.
+
+Variables make our programs easier to understand and easier to change.
+
+We will also learn how to display information using the console. Printing information can help us understand what our program is doing while it runs.
+
+Good programmers use clear variable names so that other people can understand their code.`,
+
+        code:
+`base_speed = 40
+
+bot.print("Speed:", base_speed)
+
+bot.motors_on(base_speed, base_speed)
+bot.wait(2)
+bot.motors_off()`,
+
+        challenge:
+`1. Create a variable called speed.
+2. Give speed a value of 50.
+3. Use the variable to control both motors.
+4. Print the speed to the console.
+5. Change the value of the variable and observe what happens.`
+
+    },
+
+
+    {
+        id: 5,
+
+        name: "Week 5",
+
+        title:
+            "Using Sensors",
+
+        description:
+            "Learn how sensors provide information to the robot and how the program can use that information.",
+
+        content:
+`Today we will begin working with sensors.
+
+A robot can use sensors to collect information about its surroundings. Instead of simply following a fixed sequence of instructions, the robot can use sensor information to respond to what it detects.
+
+For example, an ultrasonic sensor can be used to detect the distance between the robot and an object.
+
+The robot can read the sensor value and use that information in its program.
+
+This is an important step in robotics because it allows the robot to interact with its environment instead of simply following a predetermined path.`,
+
+        code:
+`distance = ultrasonic_sensor_in2.distance_centimeters()
+
+bot.print("Distance:", distance)
+
+if distance < 20:
+    bot.motors_off()
+else:
+    bot.motors_on(40, 40)`,
+
+        challenge:
+`1. Read the distance detected by the ultrasonic sensor.
+2. Display the distance on the console.
+3. Make the robot stop when an object is less than 20 cm away.
+4. Change the detection distance to 30 cm.
+5. Test the robot using objects at different distances.`
+
+    },
+
+
+    {
+        id: 6,
+
+        name: "Week 6",
+
+        title:
+            "Final Robot Challenge",
+
+        description:
+            "Combine movement, loops, variables and sensors to create a complete robot program.",
+
+        content:
+`Today is our final challenge.
+
+We will combine the programming concepts that we have learned throughout the previous weeks.
+
+You will use variables to control values, loops to repeat instructions, movement commands to control the robot and sensors to allow the robot to respond to its surroundings.
+
+The aim is not simply to write a long program. The aim is to create a program that is organised, easy to understand and works correctly.
+
+Before running your program, check your code carefully. Make sure your brackets, commas, indentation and variable names are correct.
+
+Test your program step by step and make changes when something does not work as expected.
+
+Remember that debugging is an important part of programming. Errors are not failures — they are opportunities to find out what needs to be fixed.`,
+
+        code:
+`speed = 40
+
+for i in range(5):
+
+    distance = ultrasonic_sensor_in2.distance_centimeters()
+
+    bot.print("Distance:", distance)
+
+    if distance < 20:
+
+        bot.motors_off()
+
+        break
+
+    else:
+
+        bot.motors_on(speed, speed)
+
+    bot.wait(1)
+
+bot.motors_off()`,
+
+        challenge:
+`Final Challenge:
+
+Create your own robot program using the concepts learned during the six weeks.
+
+Your program should:
+
+1. Use at least one variable.
+2. Use a loop.
+3. Use at least one sensor.
+4. Include robot movement.
+5. Make the robot respond to something it detects.
+6. Include clear and organised code.
+
+Test your program and be prepared to explain how your code works.`
+
     }
 
 ];
@@ -103,49 +340,77 @@ let selectedClassId = null;
 
 
 /* =========================================================
-   LOAD CLASSES
+   LOAD LESSONS FROM FIRESTORE
 ========================================================= */
 
-function loadClasses() {
+async function loadClassesFromFirebase() {
 
-    const saved =
-        localStorage.getItem("codingClasses");
+    try {
+
+        const snapshot =
+            await db
+                .collection(LESSONS_COLLECTION)
+                .orderBy("id")
+                .get();
 
 
-    if (saved) {
+        /* -----------------------------------------
+           DATABASE IS EMPTY
+        ----------------------------------------- */
 
-        try {
-
-            classes =
-                JSON.parse(saved);
-
-        }
-
-        catch (error) {
+        if (snapshot.empty) {
 
             console.log(
-                "Saved data was invalid. Loading default classes."
+                "Firestore is empty. Creating six default weeks..."
             );
+
+
+            await createDefaultClasses();
+
 
             classes =
                 JSON.parse(
                     JSON.stringify(defaultClasses)
                 );
 
-            saveClasses();
+
+            return;
 
         }
 
-    }
 
-    else {
+        /* -----------------------------------------
+           LOAD EXISTING LESSONS
+        ----------------------------------------- */
 
         classes =
-            JSON.parse(
-                JSON.stringify(defaultClasses)
+            snapshot.docs.map(
+                function(doc) {
+
+                    return doc.data();
+
+                }
             );
 
-        saveClasses();
+
+        console.log(
+            "Lessons loaded from Firestore."
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error loading Firestore:",
+            error
+        );
+
+
+        alert(
+            "Unable to connect to the lesson database. Please check your internet connection."
+        );
 
     }
 
@@ -153,15 +418,161 @@ function loadClasses() {
 
 
 /* =========================================================
-   SAVE CLASSES
+   CREATE DEFAULT SIX WEEKS
 ========================================================= */
 
-function saveClasses() {
+async function createDefaultClasses() {
 
-    localStorage.setItem(
-        "codingClasses",
-        JSON.stringify(classes)
-    );
+    try {
+
+        const batch =
+            db.batch();
+
+
+        defaultClasses.forEach(
+            function(classItem) {
+
+                const documentReference =
+                    db
+                        .collection(
+                            LESSONS_COLLECTION
+                        )
+                        .doc(
+                            String(classItem.id)
+                        );
+
+
+                batch.set(
+                    documentReference,
+                    classItem
+                );
+
+            }
+        );
+
+
+        await batch.commit();
+
+
+        console.log(
+            "Six default weeks created."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error creating default classes:",
+            error
+        );
+
+
+        alert(
+            "The lessons could not be created in Firebase."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE ONE LESSON
+========================================================= */
+
+async function saveLessonToFirebase(
+    classItem
+) {
+
+    try {
+
+        await db
+            .collection(
+                LESSONS_COLLECTION
+            )
+            .doc(
+                String(classItem.id)
+            )
+            .set(
+                classItem
+            );
+
+
+        console.log(
+            "Lesson saved to Firebase."
+        );
+
+
+        return true;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error saving lesson:",
+            error
+        );
+
+
+        alert(
+            "The lesson could not be saved. Please check your internet connection."
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE LESSON FROM FIREBASE
+========================================================= */
+
+async function deleteLessonFromFirebase(
+    classId
+) {
+
+    try {
+
+        await db
+            .collection(
+                LESSONS_COLLECTION
+            )
+            .doc(
+                String(classId)
+            )
+            .delete();
+
+
+        console.log(
+            "Lesson deleted from Firebase."
+        );
+
+
+        return true;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error deleting lesson:",
+            error
+        );
+
+
+        alert(
+            "The lesson could not be deleted."
+        );
+
+
+        return false;
+
+    }
 
 }
 
@@ -172,7 +583,9 @@ function saveClasses() {
 
 function getNextClassId() {
 
-    if (classes.length === 0) {
+    if (
+        classes.length === 0
+    ) {
 
         return 1;
 
@@ -182,16 +595,22 @@ function getNextClassId() {
     let highestId = 0;
 
 
-    classes.forEach(function(classItem) {
+    classes.forEach(
+        function(classItem) {
 
-        if (Number(classItem.id) > highestId) {
+            if (
+                Number(classItem.id)
+                >
+                highestId
+            ) {
 
-            highestId =
-                Number(classItem.id);
+                highestId =
+                    Number(classItem.id);
+
+            }
 
         }
-
-    });
+    );
 
 
     return highestId + 1;
@@ -200,15 +619,17 @@ function getNextClassId() {
 
 
 /* =========================================================
-   ADMIN PAGE INITIALIZATION
+   ADMIN INITIALIZATION
 ========================================================= */
 
-function initializeAdmin() {
+async function initializeAdmin() {
 
-    loadClasses();
+    await loadClassesFromFirebase();
 
 
-    if (classes.length === 0) {
+    if (
+        classes.length === 0
+    ) {
 
         return;
 
@@ -230,7 +651,7 @@ function initializeAdmin() {
 
 
 /* =========================================================
-   DISPLAY ADMIN CLASS LIST
+   RENDER ADMIN CLASS LIST
 ========================================================= */
 
 function renderAdminClassList() {
@@ -251,69 +672,76 @@ function renderAdminClassList() {
     list.innerHTML = "";
 
 
-    classes.forEach(function(classItem) {
+    classes.forEach(
+        function(classItem) {
 
-        const button =
-            document.createElement(
-                "button"
-            );
-
-
-        button.className =
-            "admin-class";
+            const button =
+                document.createElement(
+                    "button"
+                );
 
 
-        if (
-            classItem.id ===
-            selectedClassId
-        ) {
+            button.className =
+                "admin-class";
 
-            button.classList.add(
-                "active"
+
+            if (
+                classItem.id ===
+                selectedClassId
+            ) {
+
+                button.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            button.textContent =
+                classItem.name;
+
+
+            button.onclick =
+                function() {
+
+                    selectedClassId =
+                        classItem.id;
+
+
+                    renderAdminClassList();
+
+
+                    loadClassIntoEditor(
+                        selectedClassId
+                    );
+
+                };
+
+
+            list.appendChild(
+                button
             );
 
         }
-
-
-        button.textContent =
-            classItem.name;
-
-
-        button.onclick =
-            function() {
-
-                selectedClassId =
-                    classItem.id;
-
-
-                renderAdminClassList();
-
-
-                loadClassIntoEditor(
-                    selectedClassId
-                );
-
-            };
-
-
-        list.appendChild(button);
-
-    });
+    );
 
 }
 
 
 /* =========================================================
-   LOAD CLASS INTO ADMIN EDITOR
+   LOAD CLASS INTO EDITOR
 ========================================================= */
 
-function loadClassIntoEditor(classId) {
+function loadClassIntoEditor(
+    classId
+) {
 
     const classItem =
         classes.find(
             function(item) {
 
-                return item.id === classId;
+                return item.id ===
+                    classId;
 
             }
         );
@@ -384,7 +812,7 @@ function loadClassIntoEditor(classId) {
    SAVE LESSON
 ========================================================= */
 
-function saveLesson() {
+async function saveLesson() {
 
     if (
         selectedClassId === null
@@ -403,7 +831,8 @@ function saveLesson() {
         classes.find(
             function(item) {
 
-                return item.id === selectedClassId;
+                return item.id ===
+                    selectedClassId;
 
             }
         );
@@ -415,6 +844,10 @@ function saveLesson() {
 
     }
 
+
+    /* -----------------------------------------
+       GET VALUES FROM EDITOR
+    ----------------------------------------- */
 
     classItem.name =
         document.getElementById(
@@ -452,7 +885,21 @@ function saveLesson() {
         ).value;
 
 
-    saveClasses();
+    /* -----------------------------------------
+       SAVE TO FIREBASE
+    ----------------------------------------- */
+
+    const success =
+        await saveLessonToFirebase(
+            classItem
+        );
+
+
+    if (!success) {
+
+        return;
+
+    }
 
 
     renderAdminClassList();
@@ -470,14 +917,17 @@ function saveLesson() {
         "Saved!";
 
 
-    setTimeout(function() {
+    setTimeout(
+        function() {
 
-        document.getElementById(
-            "save-status"
-        ).textContent =
-            "Saved";
+            document.getElementById(
+                "save-status"
+            ).textContent =
+                "Saved";
 
-    }, 1500);
+        },
+        1500
+    );
 
 }
 
@@ -486,7 +936,7 @@ function saveLesson() {
    ADD CLASS
 ========================================================= */
 
-function addClass() {
+async function addClass() {
 
     const nextId =
         getNextClassId();
@@ -497,7 +947,7 @@ function addClass() {
         id: nextId,
 
         name:
-            "Class " + nextId,
+            "Week " + nextId,
 
         title:
             "New Lesson",
@@ -517,12 +967,22 @@ function addClass() {
     };
 
 
+    const success =
+        await saveLessonToFirebase(
+            newClass
+        );
+
+
+    if (!success) {
+
+        return;
+
+    }
+
+
     classes.push(
         newClass
     );
-
-
-    saveClasses();
 
 
     selectedClassId =
@@ -543,7 +1003,7 @@ function addClass() {
    DELETE CLASS
 ========================================================= */
 
-function deleteClass() {
+async function deleteClass() {
 
     if (
         classes.length <= 1
@@ -562,7 +1022,8 @@ function deleteClass() {
         classes.find(
             function(item) {
 
-                return item.id === selectedClassId;
+                return item.id ===
+                    selectedClassId;
 
             }
         );
@@ -590,17 +1051,28 @@ function deleteClass() {
     }
 
 
+    const success =
+        await deleteLessonFromFirebase(
+            selectedClassId
+        );
+
+
+    if (!success) {
+
+        return;
+
+    }
+
+
     classes =
         classes.filter(
             function(item) {
 
-                return item.id !== selectedClassId;
+                return item.id !==
+                    selectedClassId;
 
             }
         );
-
-
-    saveClasses();
 
 
     selectedClassId =
@@ -625,7 +1097,6 @@ function previewLesson() {
 
     saveLesson();
 
-
     window.open(
         "index.html",
         "_blank"
@@ -635,12 +1106,12 @@ function previewLesson() {
 
 
 /* =========================================================
-   STUDENT PAGE INITIALIZATION
+   STUDENT INITIALIZATION
 ========================================================= */
 
-function initializeStudent() {
+async function initializeStudent() {
 
-    loadClasses();
+    await loadClassesFromFirebase();
 
 
     renderStudentTabs();
@@ -652,7 +1123,7 @@ function initializeStudent() {
 
 
 /* =========================================================
-   STUDENT TABS
+   RENDER STUDENT TABS
 ========================================================= */
 
 function renderStudentTabs() {
@@ -686,7 +1157,9 @@ function renderStudentTabs() {
                 "tab";
 
 
-            if (index === 0) {
+            if (
+                index === 0
+            ) {
 
                 button.classList.add(
                     "active"
@@ -721,7 +1194,7 @@ function renderStudentTabs() {
 
 
 /* =========================================================
-   STUDENT LESSONS
+   RENDER STUDENT LESSONS
 ========================================================= */
 
 function renderStudentLessons() {
@@ -760,7 +1233,9 @@ function renderStudentLessons() {
                 "lesson";
 
 
-            if (index === 0) {
+            if (
+                index === 0
+            ) {
 
                 lesson.classList.add(
                     "active"
@@ -782,7 +1257,6 @@ function renderStudentLessons() {
 
     </span>
 
-
     <h2>
 
         ${escapeHTML(
@@ -790,7 +1264,6 @@ function renderStudentLessons() {
         )}
 
     </h2>
-
 
     <p>
 
@@ -808,7 +1281,6 @@ function renderStudentLessons() {
     <h3>
         Today's Lesson
     </h3>
-
 
     <p>
 
@@ -834,7 +1306,6 @@ ${
         Example Code
     </h3>
 
-
     <div class="code-container">
 
         <button
@@ -843,7 +1314,6 @@ ${
         >
             Copy Code
         </button>
-
 
         <pre><code>${escapeHTML(
             classItem.code
@@ -872,7 +1342,6 @@ ${
     <h3>
         Challenge
     </h3>
-
 
     <p>
 
@@ -953,7 +1422,9 @@ function showStudentClass(
         );
 
 
-    if (selectedLesson) {
+    if (
+        selectedLesson
+    ) {
 
         selectedLesson.classList.add(
             "active"
@@ -1027,12 +1498,15 @@ function copyCode(button) {
         "Copied!";
 
 
-    setTimeout(function() {
+    setTimeout(
+        function() {
 
-        button.innerText =
-            "Copy Code";
+            button.innerText =
+                "Copy Code";
 
-    }, 1500);
+        },
+        1500
+    );
 
 }
 
@@ -1059,7 +1533,9 @@ function formatText(text) {
 
 function escapeHTML(text) {
 
-    return String(text || "")
+    return String(
+        text || ""
+    )
 
         .replace(
             /&/g,
@@ -1098,7 +1574,9 @@ document.addEventListener(
     function() {
 
 
-        /* ADMIN PAGE */
+        /* -----------------------------------------
+           ADMIN PAGE
+        ----------------------------------------- */
 
         if (
             document.getElementById(
@@ -1111,7 +1589,9 @@ document.addEventListener(
         }
 
 
-        /* STUDENT PAGE */
+        /* -----------------------------------------
+           STUDENT PAGE
+        ----------------------------------------- */
 
         if (
             document.getElementById(
