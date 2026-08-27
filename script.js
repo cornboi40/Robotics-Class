@@ -517,7 +517,10 @@ async function saveLessonToFirebase(
 
 
         alert(
-            "The lesson could not be saved. Please check your internet connection."
+        "Firebase Error:\n\n" +
+        error.code +
+        "\n\n" +
+        error.message
         );
 
 
