@@ -1,14 +1,14 @@
 /* =========================================================
    CODING CLASS WEBSITE
-   Firebase Firestore + Simple Admin Password
+   FIREBASE / FIRESTORE VERSION
+
+   This version:
+   - Uses Firebase Firestore
+   - Works with normal Notepad HTML/JS files
+   - Syncs data between devices
+   - Keeps the existing admin buttons
+   - Automatically creates the first 6 weeks
 ========================================================= */
-
-
-/* =========================================================
-   ADMIN PASSWORD
-========================================================= */
-
-const ADMIN_PASSWORD = "YOUR_PASSWORD_HERE";
 
 
 /* =========================================================
@@ -16,39 +16,318 @@ const ADMIN_PASSWORD = "YOUR_PASSWORD_HERE";
 ========================================================= */
 
 const firebaseConfig = {
+
     apiKey: "AIzaSyATTYX8nB_urkLfMpq4cvON0zYZ3kogYYc",
-    authDomain: "robotics-class-fc0f6.firebaseapp.com",
-    projectId: "robotics-class-fc0f6",
-    storageBucket: "robotics-class-fc0f6.firebasestorage.app",
-    messagingSenderId: "16573968773",
-    appId: "1:16573968773:web:65036fe8b2098604a5d4ec",
-    measurementId: "G-M09HG2G047"
+
+    authDomain:
+        "robotics-class-fc0f6.firebaseapp.com",
+
+    projectId:
+        "robotics-class-fc0f6",
+
+    storageBucket:
+        "robotics-class-fc0f6.firebasestorage.app",
+
+    messagingSenderId:
+        "16573968773",
+
+    appId:
+        "1:16573968773:web:65036fe8b2098604a5d4ec",
+
+    measurementId:
+        "G-M09HG2G047"
+
 };
 
 
 /* =========================================================
-   FIREBASE INITIALIZATION
+   INITIALIZE FIREBASE
 ========================================================= */
 
-let db = null;
+firebase.initializeApp(
+    firebaseConfig
+);
 
-try {
 
-    firebase.initializeApp(firebaseConfig);
+const db =
+    firebase.firestore();
 
-    db = firebase.firestore();
 
-    console.log("Firebase connected successfully.");
+/* =========================================================
+   DATABASE SETTINGS
+========================================================= */
 
-}
-catch (error) {
+const LESSONS_COLLECTION =
+    "lessons";
 
-    console.error(
-        "Firebase initialization error:",
-        error
-    );
 
-}
+/* =========================================================
+   DEFAULT SIX WEEKS
+========================================================= */
+
+const defaultClasses = [
+
+    {
+        id: 1,
+
+        name: "Week 1",
+
+        title:
+            "Introduction to Python & Robot Movement",
+
+        description:
+            "Learn the basics of Python programming and use simple commands to control the robot.",
+
+        content:
+`Welcome to the coding class!
+
+Today we will learn the basic structure of Python commands and how we can use code to control a robot.
+
+A computer follows instructions exactly as they are written. This means that the spelling, capital letters, brackets and commas in our code are important.
+
+We will start with simple robot movement commands. We can tell the robot to move forward or turn by giving it a distance or angle.
+
+Remember that Python is case-sensitive. This means that uppercase and lowercase letters are treated differently.
+
+The goal for today is to become comfortable with typing simple commands and understanding how each command affects the robot.`,
+
+        code:
+`bot.move_forward(20, "cm")
+bot.turn_right(90, "deg")
+bot.move_forward(20, "cm")`,
+
+        challenge:
+`1. Make the robot move forward 30 cm.
+2. Make the robot turn right 90 degrees.
+3. Make the robot move forward another 30 cm.
+4. Try combining several movement commands to create your own path.`
+
+    },
+
+
+    {
+        id: 2,
+
+        name: "Week 2",
+
+        title:
+            "Controlling Speed and Timing",
+
+        description:
+            "Learn how to control the robot's motors, speed and movement time using Python.",
+
+        content:
+`Today we will learn how to control the robot using its motors.
+
+Instead of only telling the robot how far to move, we can control how fast its motors run and how long they remain switched on.
+
+The speed of the motors affects how quickly the robot moves. We can also use a wait command to make the program pause for a specific amount of time.
+
+Programming a robot is about giving it a clear sequence of instructions. The robot will follow these instructions in the order that we write them.
+
+Pay attention to the values used for speed and time. Small changes can produce very different robot movements.`,
+
+        code:
+`bot.motors_on(50, 50)
+bot.wait(2.5)
+bot.motors_off()`,
+
+        challenge:
+`1. Make the robot move at 30% speed for 3 seconds.
+2. Try increasing the speed to 50%.
+3. Make the robot stop after moving.
+4. Experiment with different times and observe how far the robot travels.`
+
+    },
+
+
+    {
+        id: 3,
+
+        name: "Week 3",
+
+        title:
+            "Loops and Repetition",
+
+        description:
+            "Learn how to use loops to repeat instructions without writing the same code multiple times.",
+
+        content:
+`Today we will learn about loops.
+
+A loop allows us to repeat a set of instructions several times. This is useful when we want a robot to perform the same action repeatedly.
+
+Without a loop, we would have to write the same commands over and over again. With a loop, we can tell Python how many times we want the instructions to be repeated.
+
+Python uses indentation to show which instructions belong inside a loop. Make sure that the instructions inside the loop are properly indented.
+
+Loops are one of the most useful tools in programming because they allow us to create more complicated behaviour using fewer lines of code.`,
+
+        code:
+`for i in range(4):
+    bot.move_forward(20, "cm")
+    bot.turn_right(90, "deg")`,
+
+        challenge:
+`1. Change the loop so the robot repeats the movement 6 times.
+2. Try changing the distance from 20 cm to 30 cm.
+3. Create a program that makes the robot travel in a square.
+4. Try creating another shape using a loop.`
+
+    },
+
+
+    {
+        id: 4,
+
+        name: "Week 4",
+
+        title:
+            "Variables and Console Output",
+
+        description:
+            "Learn how to store information in variables and display information using the console.",
+
+        content:
+`Today we will learn about variables.
+
+A variable is a name that we can use to store information. For example, instead of writing the number 40 every time we want to use a speed, we can store it in a variable called base_speed.
+
+Variables make our programs easier to understand and easier to change.
+
+We will also learn how to display information using the console. Printing information can help us understand what our program is doing while it runs.
+
+Good programmers use clear variable names so that other people can understand their code.`,
+
+        code:
+`base_speed = 40
+
+bot.print("Speed:", base_speed)
+
+bot.motors_on(base_speed, base_speed)
+bot.wait(2)
+bot.motors_off()`,
+
+        challenge:
+`1. Create a variable called speed.
+2. Give speed a value of 50.
+3. Use the variable to control both motors.
+4. Print the speed to the console.
+5. Change the value of the variable and observe what happens.`
+
+    },
+
+
+    {
+        id: 5,
+
+        name: "Week 5",
+
+        title:
+            "Using Sensors",
+
+        description:
+            "Learn how sensors provide information to the robot and how the program can use that information.",
+
+        content:
+`Today we will begin working with sensors.
+
+A robot can use sensors to collect information about its surroundings. Instead of simply following a fixed sequence of instructions, the robot can use sensor information to respond to what it detects.
+
+For example, an ultrasonic sensor can be used to detect the distance between the robot and an object.
+
+The robot can read the sensor value and use that information in its program.
+
+This is an important step in robotics because it allows the robot to interact with its environment instead of simply following a predetermined path.`,
+
+        code:
+`distance = ultrasonic_sensor_in2.distance_centimeters()
+
+bot.print("Distance:", distance)
+
+if distance < 20:
+    bot.motors_off()
+else:
+    bot.motors_on(40, 40)`,
+
+        challenge:
+`1. Read the distance detected by the ultrasonic sensor.
+2. Display the distance on the console.
+3. Make the robot stop when an object is less than 20 cm away.
+4. Change the detection distance to 30 cm.
+5. Test the robot using objects at different distances.`
+
+    },
+
+
+    {
+        id: 6,
+
+        name: "Week 6",
+
+        title:
+            "Final Robot Challenge",
+
+        description:
+            "Combine movement, loops, variables and sensors to create a complete robot program.",
+
+        content:
+`Today is our final challenge.
+
+We will combine the programming concepts that we have learned throughout the previous weeks.
+
+You will use variables to control values, loops to repeat instructions, movement commands to control the robot and sensors to allow the robot to respond to its surroundings.
+
+The aim is not simply to write a long program. The aim is to create a program that is organised, easy to understand and works correctly.
+
+Before running your program, check your code carefully. Make sure your brackets, commas, indentation and variable names are correct.
+
+Test your program step by step and make changes when something does not work as expected.
+
+Remember that debugging is an important part of programming. Errors are not failures — they are opportunities to find out what needs to be fixed.`,
+
+        code:
+`speed = 40
+
+for i in range(5):
+
+    distance = ultrasonic_sensor_in2.distance_centimeters()
+
+    bot.print("Distance:", distance)
+
+    if distance < 20:
+
+        bot.motors_off()
+
+        break
+
+    else:
+
+        bot.motors_on(speed, speed)
+
+    bot.wait(1)
+
+bot.motors_off()`,
+
+        challenge:
+`Final Challenge:
+
+Create your own robot program using the concepts learned during the six weeks.
+
+Your program should:
+
+1. Use at least one variable.
+2. Use a loop.
+3. Use at least one sensor.
+4. Include robot movement.
+5. Make the robot respond to something it detects.
+6. Include clear and organised code.
+
+Test your program and be prepared to explain how your code works.`
+
+    }
+
+];
 
 
 /* =========================================================
@@ -57,268 +336,36 @@ catch (error) {
 
 let classes = [];
 
-let currentClassIndex = 0;
+let selectedClassId = null;
 
 
 /* =========================================================
-   DEFAULT CLASSES
-   These are only used if Firestore has no lessons yet.
+   LOAD LESSONS FROM FIRESTORE
 ========================================================= */
 
-const defaultClasses = [
-
-    {
-        id: "1",
-        className: "Class 1",
-        title: "Introduction to GearsBot",
-        description: "",
-        content: "",
-        code: "",
-        challenge: ""
-    },
-
-    {
-        id: "2",
-        className: "Class 2",
-        title: "Robot Movement",
-        description: "",
-        content: "",
-        code: "",
-        challenge: ""
-    },
-
-    {
-        id: "3",
-        className: "Class 3",
-        title: "Loops",
-        description: "",
-        content: "",
-        code: "",
-        challenge: ""
-    },
-
-    {
-        id: "4",
-        className: "Class 4",
-        title: "Variables and Console",
-        description: "",
-        content: "",
-        code: "",
-        challenge: ""
-    },
-
-    {
-        id: "5",
-        className: "Class 5",
-        title: "Conditional Logic",
-        description: "",
-        content: "",
-        code: "",
-        challenge: ""
-    },
-
-    {
-        id: "6",
-        className: "Class 6",
-        title: "Sensors and Automation",
-        description: "",
-        content: "",
-        code: "",
-        challenge: ""
-    }
-
-];
-
-
-/* =========================================================
-   ADMIN LOGIN
-========================================================= */
-
-function checkAdminPassword() {
-
-    const passwordInput =
-        document.getElementById(
-            "admin-password"
-        );
-
-    const errorMessage =
-        document.getElementById(
-            "login-error"
-        );
-
-
-    if (!passwordInput) {
-
-        console.error(
-            "Admin password input not found."
-        );
-
-        return;
-
-    }
-
-
-    const enteredPassword =
-        passwordInput.value;
-
-
-    if (
-        enteredPassword === ADMIN_PASSWORD
-    ) {
-
-        sessionStorage.setItem(
-            "adminLoggedIn",
-            "true"
-        );
-
-
-        const loginScreen =
-            document.getElementById(
-                "admin-login"
-            );
-
-        const adminContent =
-            document.getElementById(
-                "admin-content"
-            );
-
-
-        if (loginScreen) {
-
-            loginScreen.style.display =
-                "none";
-
-        }
-
-
-        if (adminContent) {
-
-            adminContent.style.display =
-                "block";
-
-        }
-
-
-        if (errorMessage) {
-
-            errorMessage.textContent = "";
-
-        }
-
-
-        initializeAdmin();
-
-    }
-
-    else {
-
-        if (errorMessage) {
-
-            errorMessage.textContent =
-                "Incorrect password. Please try again.";
-
-        }
-
-
-        passwordInput.value = "";
-
-        passwordInput.focus();
-
-    }
-
-}
-
-
-/* =========================================================
-   ENTER KEY FOR PASSWORD
-========================================================= */
-
-function handlePasswordKey(event) {
-
-    if (
-        event.key === "Enter"
-    ) {
-
-        checkAdminPassword();
-
-    }
-
-}
-
-
-/* =========================================================
-   ADMIN LOGOUT
-========================================================= */
-
-function logoutAdmin() {
-
-    sessionStorage.removeItem(
-        "adminLoggedIn"
-    );
-
-    location.reload();
-
-}
-
-
-/* =========================================================
-   INITIALIZE ADMIN
-========================================================= */
-
-async function initializeAdmin() {
-
-    console.log(
-        "Initializing admin panel..."
-    );
-
-
-    await loadLessonsFromFirebase();
-
-    renderAdminClassList();
-
-    selectClass(0);
-
-}
-
-
-/* =========================================================
-   LOAD LESSONS FROM FIREBASE
-========================================================= */
-
-async function loadLessonsFromFirebase() {
-
-    if (!db) {
-
-        console.error(
-            "Firestore database is not initialized."
-        );
-
-        classes =
-            JSON.parse(
-                JSON.stringify(defaultClasses)
-            );
-
-        return;
-
-    }
-
+async function loadClassesFromFirebase() {
 
     try {
 
         const snapshot =
             await db
-                .collection("lessons")
-                .orderBy("order")
+                .collection(LESSONS_COLLECTION)
+                .orderBy("id")
                 .get();
 
 
-        if (
-            snapshot.empty
-        ) {
+        /* -----------------------------------------
+           DATABASE IS EMPTY
+        ----------------------------------------- */
+
+        if (snapshot.empty) {
 
             console.log(
-                "No lessons found. Creating default classes."
+                "Firestore is empty. Creating six default weeks..."
             );
+
+
+            await createDefaultClasses();
 
 
             classes =
@@ -327,70 +374,88 @@ async function loadLessonsFromFirebase() {
                 );
 
 
-            /*
-             * We do NOT automatically upload
-             * the default classes.
-             *
-             * This prevents accidental overwriting.
-             */
-
             return;
 
         }
 
 
-        classes = [];
+        /* -----------------------------------------
+           LOAD EXISTING LESSONS
+        ----------------------------------------- */
+
+        classes =
+            snapshot.docs.map(
+                function(doc) {
+
+                    return doc.data();
+
+                }
+            );
 
 
-        snapshot.forEach(
-            function(document) {
-
-                const data =
-                    document.data();
+        console.log(
+            "Lessons loaded from Firestore."
+        );
 
 
-                classes.push({
+    }
 
-                    id:
-                        document.id,
+    catch (error) {
 
-                    className:
-                        data.className ||
-                        "Class " +
-                        (data.order + 1),
+        console.error(
+            "Error loading Firestore:",
+            error
+        );
 
-                    title:
-                        data.title ||
-                        "",
 
-                    description:
-                        data.description ||
-                        "",
+        alert(
+            "Unable to connect to the lesson database. Please check your internet connection."
+        );
 
-                    content:
-                        data.content ||
-                        "",
+    }
 
-                    code:
-                        data.code ||
-                        "",
+}
 
-                    challenge:
-                        data.challenge ||
-                        "",
 
-                    order:
-                        data.order || 0
+/* =========================================================
+   CREATE DEFAULT SIX WEEKS
+========================================================= */
 
-                });
+async function createDefaultClasses() {
+
+    try {
+
+        const batch =
+            db.batch();
+
+
+        defaultClasses.forEach(
+            function(classItem) {
+
+                const documentReference =
+                    db
+                        .collection(
+                            LESSONS_COLLECTION
+                        )
+                        .doc(
+                            String(classItem.id)
+                        );
+
+
+                batch.set(
+                    documentReference,
+                    classItem
+                );
 
             }
         );
 
 
+        await batch.commit();
+
+
         console.log(
-            "Lessons loaded:",
-            classes
+            "Six default weeks created."
         );
 
     }
@@ -398,22 +463,192 @@ async function loadLessonsFromFirebase() {
     catch (error) {
 
         console.error(
-            "Error loading lessons:",
+            "Error creating default classes:",
             error
         );
 
 
-        /*
-         * If Firebase fails,
-         * use the local default structure.
-         */
-
-        classes =
-            JSON.parse(
-                JSON.stringify(defaultClasses)
-            );
+        alert(
+            "The lessons could not be created in Firebase."
+        );
 
     }
+
+}
+
+
+/* =========================================================
+   SAVE ONE LESSON
+========================================================= */
+
+async function saveLessonToFirebase(
+    classItem
+) {
+
+    try {
+
+        await db
+            .collection(
+                LESSONS_COLLECTION
+            )
+            .doc(
+                String(classItem.id)
+            )
+            .set(
+                classItem
+            );
+
+
+        console.log(
+            "Lesson saved to Firebase."
+        );
+
+
+        return true;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error saving lesson:",
+            error
+        );
+
+
+        alert(
+        "Firebase Error:\n\n" +
+        error.code +
+        "\n\n" +
+        error.message
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE LESSON FROM FIREBASE
+========================================================= */
+
+async function deleteLessonFromFirebase(
+    classId
+) {
+
+    try {
+
+        await db
+            .collection(
+                LESSONS_COLLECTION
+            )
+            .doc(
+                String(classId)
+            )
+            .delete();
+
+
+        console.log(
+            "Lesson deleted from Firebase."
+        );
+
+
+        return true;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error deleting lesson:",
+            error
+        );
+
+
+        alert(
+            "The lesson could not be deleted."
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   GET NEXT CLASS ID
+========================================================= */
+
+function getNextClassId() {
+
+    if (
+        classes.length === 0
+    ) {
+
+        return 1;
+
+    }
+
+
+    let highestId = 0;
+
+
+    classes.forEach(
+        function(classItem) {
+
+            if (
+                Number(classItem.id)
+                >
+                highestId
+            ) {
+
+                highestId =
+                    Number(classItem.id);
+
+            }
+
+        }
+    );
+
+
+    return highestId + 1;
+
+}
+
+
+/* =========================================================
+   ADMIN INITIALIZATION
+========================================================= */
+
+async function initializeAdmin() {
+
+    await loadClassesFromFirebase();
+
+
+    if (
+        classes.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    selectedClassId =
+        classes[0].id;
+
+
+    renderAdminClassList();
+
+
+    loadClassIntoEditor(
+        selectedClassId
+    );
 
 }
 
@@ -441,7 +676,7 @@ function renderAdminClassList() {
 
 
     classes.forEach(
-        function(classItem, index) {
+        function(classItem) {
 
             const button =
                 document.createElement(
@@ -450,11 +685,12 @@ function renderAdminClassList() {
 
 
             button.className =
-                "class-tab";
+                "admin-class";
 
 
             if (
-                index === currentClassIndex
+                classItem.id ===
+                selectedClassId
             ) {
 
                 button.classList.add(
@@ -465,15 +701,22 @@ function renderAdminClassList() {
 
 
             button.textContent =
-                classItem.className ||
-                "Class " +
-                (index + 1);
+                classItem.name;
 
 
             button.onclick =
                 function() {
 
-                    selectClass(index);
+                    selectedClassId =
+                        classItem.id;
+
+
+                    renderAdminClassList();
+
+
+                    loadClassIntoEditor(
+                        selectedClassId
+                    );
 
                 };
 
@@ -489,193 +732,81 @@ function renderAdminClassList() {
 
 
 /* =========================================================
-   SELECT CLASS
+   LOAD CLASS INTO EDITOR
 ========================================================= */
 
-function selectClass(index) {
+function loadClassIntoEditor(
+    classId
+) {
 
-    if (
-        index < 0 ||
-        index >= classes.length
-    ) {
+    const classItem =
+        classes.find(
+            function(item) {
+
+                return item.id ===
+                    classId;
+
+            }
+        );
+
+
+    if (!classItem) {
 
         return;
 
     }
 
 
-    currentClassIndex =
-        index;
+    selectedClassId =
+        classId;
 
 
-    const classItem =
-        classes[index];
+    document.getElementById(
+        "editor-class-number"
+    ).textContent =
+        classItem.name.toUpperCase();
 
 
-    const classNumber =
-        document.getElementById(
-            "editor-class-number"
-        );
+    document.getElementById(
+        "class-name"
+    ).value =
+        classItem.name;
 
-    const className =
-        document.getElementById(
-            "class-name"
-        );
 
-    const lessonTitle =
-        document.getElementById(
-            "lesson-title"
-        );
+    document.getElementById(
+        "lesson-title"
+    ).value =
+        classItem.title;
 
-    const description =
-        document.getElementById(
-            "lesson-description"
-        );
 
-    const content =
-        document.getElementById(
-            "lesson-content"
-        );
+    document.getElementById(
+        "lesson-description"
+    ).value =
+        classItem.description;
 
-    const code =
-        document.getElementById(
-            "lesson-code"
-        );
 
-    const challenge =
-        document.getElementById(
-            "lesson-challenge"
-        );
+    document.getElementById(
+        "lesson-content"
+    ).value =
+        classItem.content;
 
 
-    if (classNumber) {
+    document.getElementById(
+        "lesson-code"
+    ).value =
+        classItem.code;
 
-        classNumber.textContent =
-            "CLASS " +
-            (index + 1);
 
-    }
+    document.getElementById(
+        "lesson-challenge"
+    ).value =
+        classItem.challenge;
 
 
-    if (className) {
-
-        className.value =
-            classItem.className || "";
-
-    }
-
-
-    if (lessonTitle) {
-
-        lessonTitle.value =
-            classItem.title || "";
-
-    }
-
-
-    if (description) {
-
-        description.value =
-            classItem.description || "";
-
-    }
-
-
-    if (content) {
-
-        content.value =
-            classItem.content || "";
-
-    }
-
-
-    if (code) {
-
-        code.value =
-            classItem.code || "";
-
-    }
-
-
-    if (challenge) {
-
-        challenge.value =
-            classItem.challenge || "";
-
-    }
-
-
-    renderAdminClassList();
-
-
-    setSaveStatus(
-        "Saved"
-    );
-
-}
-
-
-/* =========================================================
-   ADD CLASS
-========================================================= */
-
-function addClass() {
-
-    const newNumber =
-        classes.length + 1;
-
-
-    const newClass = {
-
-        id:
-            String(
-                Date.now()
-            ),
-
-        className:
-            "Class " +
-            newNumber,
-
-        title:
-            "New Lesson",
-
-        description:
-            "",
-
-        content:
-            "",
-
-        code:
-            "",
-
-        challenge:
-            "",
-
-        order:
-            classes.length
-
-    };
-
-
-    classes.push(
-        newClass
-    );
-
-
-    currentClassIndex =
-        classes.length - 1;
-
-
-    renderAdminClassList();
-
-    selectClass(
-        currentClassIndex
-    );
-
-
-    setSaveStatus(
-        "Unsaved"
-    );
+    document.getElementById(
+        "save-status"
+    ).textContent =
+        "Saved";
 
 }
 
@@ -687,11 +818,11 @@ function addClass() {
 async function saveLesson() {
 
     if (
-        classes.length === 0
+        selectedClassId === null
     ) {
 
         alert(
-            "There are no classes to save."
+            "Please select a class first."
         );
 
         return;
@@ -700,14 +831,17 @@ async function saveLesson() {
 
 
     const classItem =
-        classes[currentClassIndex];
+        classes.find(
+            function(item) {
+
+                return item.id ===
+                    selectedClassId;
+
+            }
+        );
 
 
     if (!classItem) {
-
-        alert(
-            "No class is currently selected."
-        );
 
         return;
 
@@ -718,7 +852,7 @@ async function saveLesson() {
        GET VALUES FROM EDITOR
     ----------------------------------------- */
 
-    classItem.className =
+    classItem.name =
         document.getElementById(
             "class-name"
         ).value;
@@ -754,106 +888,116 @@ async function saveLesson() {
         ).value;
 
 
-    classItem.order =
-        currentClassIndex;
-
-
-    setSaveStatus(
-        "Saving..."
-    );
-
-
     /* -----------------------------------------
-       SAVE TO FIRESTORE
+       SAVE TO FIREBASE
     ----------------------------------------- */
 
-    if (!db) {
-
-        setSaveStatus(
-            "Firebase Error"
+    const success =
+        await saveLessonToFirebase(
+            classItem
         );
 
-        alert(
-            "Firebase is not connected."
-        );
+
+    if (!success) {
 
         return;
 
     }
 
 
-    try {
-
-        await db
-            .collection("lessons")
-            .doc(
-                classItem.id
-            )
-            .set({
-
-                className:
-                    classItem.className,
-
-                title:
-                    classItem.title,
-
-                description:
-                    classItem.description,
-
-                content:
-                    classItem.content,
-
-                code:
-                    classItem.code,
-
-                challenge:
-                    classItem.challenge,
-
-                order:
-                    currentClassIndex,
-
-                updatedAt:
-                    firebase.firestore.FieldValue.serverTimestamp()
-
-            });
+    renderAdminClassList();
 
 
-        setSaveStatus(
-            "Saved"
+    document.getElementById(
+        "editor-class-number"
+    ).textContent =
+        classItem.name.toUpperCase();
+
+
+    document.getElementById(
+        "save-status"
+    ).textContent =
+        "Saved!";
+
+
+    setTimeout(
+        function() {
+
+            document.getElementById(
+                "save-status"
+            ).textContent =
+                "Saved";
+
+        },
+        1500
+    );
+
+}
+
+
+/* =========================================================
+   ADD CLASS
+========================================================= */
+
+async function addClass() {
+
+    const nextId =
+        getNextClassId();
+
+
+    const newClass = {
+
+        id: nextId,
+
+        name:
+            "Week " + nextId,
+
+        title:
+            "New Lesson",
+
+        description:
+            "",
+
+        content:
+            "",
+
+        code:
+            "",
+
+        challenge:
+            ""
+
+    };
+
+
+    const success =
+        await saveLessonToFirebase(
+            newClass
         );
 
 
-        renderAdminClassList();
+    if (!success) {
 
-
-        console.log(
-            "Lesson saved successfully."
-        );
-
+        return;
 
     }
 
-    catch (error) {
 
-        console.error(
-            "Firebase save error:",
-            error
-        );
+    classes.push(
+        newClass
+    );
 
 
-        setSaveStatus(
-            "Save Failed"
-        );
+    selectedClassId =
+        nextId;
 
 
-        alert(
-            "Firebase Error:\n\n" +
-            error.code +
-            "\n\n" +
-            error.message
-        );
+    renderAdminClassList();
 
-    }
+
+    loadClassIntoEditor(
+        nextId
+    );
 
 }
 
@@ -865,8 +1009,12 @@ async function saveLesson() {
 async function deleteClass() {
 
     if (
-        classes.length === 0
+        classes.length <= 1
     ) {
+
+        alert(
+            "You must have at least one class."
+        );
 
         return;
 
@@ -874,7 +1022,14 @@ async function deleteClass() {
 
 
     const classItem =
-        classes[currentClassIndex];
+        classes.find(
+            function(item) {
+
+                return item.id ===
+                    selectedClassId;
+
+            }
+        );
 
 
     if (!classItem) {
@@ -887,7 +1042,7 @@ async function deleteClass() {
     const confirmed =
         confirm(
             "Are you sure you want to delete " +
-            classItem.className +
+            classItem.name +
             "?"
         );
 
@@ -899,304 +1054,73 @@ async function deleteClass() {
     }
 
 
-    try {
-
-        if (db) {
-
-            await db
-                .collection("lessons")
-                .doc(
-                    classItem.id
-                )
-                .delete();
-
-        }
-
-
-        classes.splice(
-            currentClassIndex,
-            1
+    const success =
+        await deleteLessonFromFirebase(
+            selectedClassId
         );
 
 
-        if (
-            classes.length === 0
-        ) {
-
-            classes =
-                JSON.parse(
-                    JSON.stringify(defaultClasses)
-                );
-
-        }
-
-
-        if (
-            currentClassIndex >=
-            classes.length
-        ) {
-
-            currentClassIndex =
-                classes.length - 1;
-
-        }
-
-
-        renderAdminClassList();
-
-        selectClass(
-            currentClassIndex
-        );
-
-
-        alert(
-            "Class deleted successfully."
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Delete error:",
-            error
-        );
-
-
-        alert(
-            "The class could not be deleted.\n\n" +
-            error.message
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   SAVE STATUS
-========================================================= */
-
-function setSaveStatus(status) {
-
-    const element =
-        document.getElementById(
-            "save-status"
-        );
-
-
-    if (element) {
-
-        element.textContent =
-            status;
-
-    }
-
-}
-
-
-/* =========================================================
-   PREVIEW LESSON
-========================================================= */
-
-function previewLesson() {
-
-    if (
-        classes.length === 0
-    ) {
+    if (!success) {
 
         return;
 
     }
 
 
-    const classItem =
-        classes[currentClassIndex];
+    classes =
+        classes.filter(
+            function(item) {
 
-
-    let preview =
-        "";
-
-
-    preview +=
-        classItem.className +
-        "\n\n";
-
-
-    preview +=
-        classItem.title +
-        "\n\n";
-
-
-    preview +=
-        classItem.description +
-        "\n\n";
-
-
-    preview +=
-        classItem.content +
-        "\n\n";
-
-
-    preview +=
-        "CODE\n\n";
-
-
-    preview +=
-        classItem.code +
-        "\n\n";
-
-
-    preview +=
-        "CHALLENGE\n\n";
-
-
-    preview +=
-        classItem.challenge;
-
-
-    alert(
-        preview
-    );
-
-}
-
-
-/* =========================================================
-   STUDENT PAGE
-========================================================= */
-
-async function initializeStudent() {
-
-    console.log(
-        "Initializing student page..."
-    );
-
-
-    await loadStudentLessons();
-
-    renderStudentTabs();
-
-    renderStudentLesson(
-        0
-    );
-
-}
-
-
-/* =========================================================
-   LOAD STUDENT LESSONS
-========================================================= */
-
-async function loadStudentLessons() {
-
-    if (!db) {
-
-        console.error(
-            "Firestore is not connected."
-        );
-
-        classes =
-            JSON.parse(
-                JSON.stringify(defaultClasses)
-            );
-
-        return;
-
-    }
-
-
-    try {
-
-        const snapshot =
-            await db
-                .collection("lessons")
-                .orderBy("order")
-                .get();
-
-
-        if (
-            snapshot.empty
-        ) {
-
-            classes =
-                JSON.parse(
-                    JSON.stringify(defaultClasses)
-                );
-
-            return;
-
-        }
-
-
-        classes = [];
-
-
-        snapshot.forEach(
-            function(document) {
-
-                const data =
-                    document.data();
-
-
-                classes.push({
-
-                    id:
-                        document.id,
-
-                    className:
-                        data.className ||
-                        "",
-
-                    title:
-                        data.title ||
-                        "",
-
-                    description:
-                        data.description ||
-                        "",
-
-                    content:
-                        data.content ||
-                        "",
-
-                    code:
-                        data.code ||
-                        "",
-
-                    challenge:
-                        data.challenge ||
-                        "",
-
-                    order:
-                        data.order || 0
-
-                });
+                return item.id !==
+                    selectedClassId;
 
             }
         );
 
 
-        console.log(
-            "Student lessons loaded."
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Student lesson loading error:",
-            error
-        );
+    selectedClassId =
+        classes[0].id;
 
 
-        classes =
-            JSON.parse(
-                JSON.stringify(defaultClasses)
-            );
+    renderAdminClassList();
 
-    }
+
+    loadClassIntoEditor(
+        selectedClassId
+    );
+
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+function previewLesson() {
+
+    saveLesson();
+
+    window.open(
+        "index.html",
+        "_blank"
+    );
+
+}
+
+
+/* =========================================================
+   STUDENT INITIALIZATION
+========================================================= */
+
+async function initializeStudent() {
+
+    await loadClassesFromFirebase();
+
+
+    renderStudentTabs();
+
+
+    renderStudentLessons();
 
 }
 
@@ -1233,7 +1157,7 @@ function renderStudentTabs() {
 
 
             button.className =
-                "tab-button";
+                "tab";
 
 
             if (
@@ -1248,16 +1172,15 @@ function renderStudentTabs() {
 
 
             button.textContent =
-                classItem.className ||
-                "Class " +
-                (index + 1);
+                classItem.name;
 
 
             button.onclick =
                 function() {
 
-                    renderStudentLesson(
-                        index
+                    showStudentClass(
+                        classItem.id,
+                        button
                     );
 
                 };
@@ -1274,24 +1197,10 @@ function renderStudentTabs() {
 
 
 /* =========================================================
-   RENDER STUDENT LESSON
+   RENDER STUDENT LESSONS
 ========================================================= */
 
-function renderStudentLesson(index) {
-
-    if (
-        index < 0 ||
-        index >= classes.length
-    ) {
-
-        return;
-
-    }
-
-
-    currentClassIndex =
-        index;
-
+function renderStudentLessons() {
 
     const container =
         document.getElementById(
@@ -1306,385 +1215,379 @@ function renderStudentLesson(index) {
     }
 
 
-    const classItem =
-        classes[index];
+    container.innerHTML = "";
 
 
-    /* -----------------------------------------
-       UPDATE TAB ACTIVE STATE
-    ----------------------------------------- */
+    classes.forEach(
+        function(classItem, index) {
 
-    const tabs =
+            const lesson =
+                document.createElement(
+                    "section"
+                );
+
+
+            lesson.id =
+                "student-class-" +
+                classItem.id;
+
+
+            lesson.className =
+                "lesson";
+
+
+            if (
+                index === 0
+            ) {
+
+                lesson.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            lesson.innerHTML =
+
+`
+<div class="lesson-header">
+
+    <span class="class-number">
+
+        ${escapeHTML(
+            classItem.name
+        ).toUpperCase()}
+
+    </span>
+
+    <h2>
+
+        ${escapeHTML(
+            classItem.title
+        )}
+
+    </h2>
+
+    <p>
+
+        ${escapeHTML(
+            classItem.description
+        )}
+
+    </p>
+
+</div>
+
+
+<div class="lesson-section">
+
+    <h3>
+        Today's Lesson
+    </h3>
+
+    <p>
+
+        ${formatText(
+            classItem.content
+        )}
+
+    </p>
+
+</div>
+
+
+${
+    classItem.code &&
+    classItem.code.trim() !== ""
+
+    ?
+
+`
+<div class="lesson-section">
+
+    <h3>
+        Example Code
+    </h3>
+
+    <div class="code-container">
+
+        <button
+            class="copy-button"
+            onclick="copyCode(this)"
+        >
+            Copy Code
+        </button>
+
+        <pre><code>${escapeHTML(
+            classItem.code
+        )}</code></pre>
+
+    </div>
+
+</div>
+`
+
+    :
+
+""
+}
+
+
+${
+    classItem.challenge &&
+    classItem.challenge.trim() !== ""
+
+    ?
+
+`
+<div class="lesson-section">
+
+    <h3>
+        Challenge
+    </h3>
+
+    <p>
+
+        ${formatText(
+            classItem.challenge
+        )}
+
+    </p>
+
+</div>
+`
+
+    :
+
+""
+}
+
+`;
+
+
+            container.appendChild(
+                lesson
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SHOW STUDENT CLASS
+========================================================= */
+
+function showStudentClass(
+    classId,
+    button
+) {
+
+    const lessons =
         document.querySelectorAll(
-            "#student-tabs .tab-button"
+            ".lesson"
         );
 
 
-    tabs.forEach(
-        function(tab, tabIndex) {
+    lessons.forEach(
+        function(lesson) {
 
-            if (
-                tabIndex === index
-            ) {
-
-                tab.classList.add(
-                    "active"
-                );
-
-            }
-
-            else {
-
-                tab.classList.remove(
-                    "active"
-                );
-
-            }
+            lesson.classList.remove(
+                "active"
+            );
 
         }
     );
 
 
-    /* -----------------------------------------
-       CREATE LESSON
-    ----------------------------------------- */
-
-    container.innerHTML = "";
-
-
-    const lesson =
-        document.createElement(
-            "div"
+    const tabs =
+        document.querySelectorAll(
+            ".tab"
         );
 
 
-    lesson.className =
-        "lesson-card";
+    tabs.forEach(
+        function(tab) {
 
+            tab.classList.remove(
+                "active"
+            );
 
-    /* -----------------------------------------
-       CLASS NAME
-    ----------------------------------------- */
-
-    const classHeading =
-        document.createElement(
-            "div"
-        );
-
-
-    classHeading.className =
-        "class-number";
-
-
-    classHeading.textContent =
-        classItem.className;
-
-
-    lesson.appendChild(
-        classHeading
+        }
     );
 
 
-    /* -----------------------------------------
-       TITLE
-    ----------------------------------------- */
-
-    const title =
-        document.createElement(
-            "h2"
+    const selectedLesson =
+        document.getElementById(
+            "student-class-" +
+            classId
         );
 
 
-    title.textContent =
-        classItem.title;
-
-
-    lesson.appendChild(
-        title
-    );
-
-
-    /* -----------------------------------------
-       DESCRIPTION
-    ----------------------------------------- */
-
     if (
-        classItem.description
+        selectedLesson
     ) {
 
-        const description =
-            document.createElement(
-                "p"
-            );
-
-
-        description.textContent =
-            classItem.description;
-
-
-        lesson.appendChild(
-            description
+        selectedLesson.classList.add(
+            "active"
         );
 
     }
 
 
-    /* -----------------------------------------
-       MAIN CONTENT
-    ----------------------------------------- */
-
-    if (
-        classItem.content
-    ) {
-
-        const content =
-            document.createElement(
-                "div"
-            );
-
-
-        content.className =
-            "lesson-content";
-
-
-        content.innerHTML =
-            formatText(
-                classItem.content
-            );
-
-
-        lesson.appendChild(
-            content
-        );
-
-    }
-
-
-    /* -----------------------------------------
-       CODE
-    ----------------------------------------- */
-
-    if (
-        classItem.code
-    ) {
-
-        const codeHeading =
-            document.createElement(
-                "h3"
-            );
-
-
-        codeHeading.textContent =
-            "Code";
-
-
-        lesson.appendChild(
-            codeHeading
-        );
-
-
-        const codeBlock =
-            document.createElement(
-                "pre"
-            );
-
-
-        const code =
-            document.createElement(
-                "code"
-            );
-
-
-        code.textContent =
-            classItem.code;
-
-
-        codeBlock.appendChild(
-            code
-        );
-
-
-        lesson.appendChild(
-            codeBlock
-        );
-
-    }
-
-
-    /* -----------------------------------------
-       CHALLENGE
-    ----------------------------------------- */
-
-    if (
-        classItem.challenge
-    ) {
-
-        const challengeHeading =
-            document.createElement(
-                "h3"
-            );
-
-
-        challengeHeading.textContent =
-            "Challenge";
-
-
-        lesson.appendChild(
-            challengeHeading
-        );
-
-
-        const challenge =
-            document.createElement(
-                "div"
-            );
-
-
-        challenge.className =
-            "challenge";
-
-
-        challenge.innerHTML =
-            formatText(
-                classItem.challenge
-            );
-
-
-        lesson.appendChild(
-            challenge
-        );
-
-    }
-
-
-    container.appendChild(
-        lesson
+    button.classList.add(
+        "active"
     );
 
 }
 
 
 /* =========================================================
-   FORMAT TEXT
+   COPY CODE
+========================================================= */
+
+function copyCode(button) {
+
+    const code =
+        button.parentElement
+            .querySelector("code")
+            .innerText;
+
+
+    if (
+        navigator.clipboard
+    ) {
+
+        navigator.clipboard.writeText(
+            code
+        );
+
+    }
+
+    else {
+
+        const temporary =
+            document.createElement(
+                "textarea"
+            );
+
+
+        temporary.value =
+            code;
+
+
+        document.body.appendChild(
+            temporary
+        );
+
+
+        temporary.select();
+
+
+        document.execCommand(
+            "copy"
+        );
+
+
+        document.body.removeChild(
+            temporary
+        );
+
+    }
+
+
+    button.innerText =
+        "Copied!";
+
+
+    setTimeout(
+        function() {
+
+            button.innerText =
+                "Copy Code";
+
+        },
+        1500
+    );
+
+}
+
+
+/* =========================================================
+   TEXT FORMATTING
 ========================================================= */
 
 function formatText(text) {
 
-    if (!text) {
-
-        return "";
-
-    }
-
-
-    /*
-     * Escape HTML first so that normal lesson
-     * text cannot accidentally become HTML.
-     */
-
-    const escaped =
-        text
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
-
-
-    /*
-     * Convert line breaks into paragraphs.
-     */
-
-    return escaped
-        .split(
-            /\n\s*\n/
-        )
-        .map(
-            function(paragraph) {
-
-                return (
-                    "<p>" +
-                    paragraph
-                        .replace(
-                            /\n/g,
-                            "<br>"
-                        ) +
-                    "</p>"
-                );
-
-            }
-        )
-        .join("");
+    return escapeHTML(
+        text || ""
+    ).replace(
+        /\n/g,
+        "<br>"
+    );
 
 }
 
 
 /* =========================================================
-   PAGE INITIALIZATION
+   HTML SECURITY
+========================================================= */
+
+function escapeHTML(text) {
+
+    return String(
+        text || ""
+    )
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   START WEBSITE
 ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     function() {
 
+
         /* -----------------------------------------
            ADMIN PAGE
         ----------------------------------------- */
 
-        const adminLogin =
+        if (
             document.getElementById(
-                "admin-login"
-            );
+                "admin-class-list"
+            )
+        ) {
 
-
-        if (adminLogin) {
-
-            const loggedIn =
-                sessionStorage.getItem(
-                    "adminLoggedIn"
-                );
-
-
-            if (
-                loggedIn === "true"
-            ) {
-
-                adminLogin.style.display =
-                    "none";
-
-
-                const adminContent =
-                    document.getElementById(
-                        "admin-content"
-                    );
-
-
-                if (adminContent) {
-
-                    adminContent.style.display =
-                        "block";
-
-                }
-
-
-                initializeAdmin();
-
-            }
+            initializeAdmin();
 
         }
 
@@ -1693,13 +1596,11 @@ document.addEventListener(
            STUDENT PAGE
         ----------------------------------------- */
 
-        const studentTabs =
+        if (
             document.getElementById(
                 "student-tabs"
-            );
-
-
-        if (studentTabs) {
+            )
+        ) {
 
             initializeStudent();
 
