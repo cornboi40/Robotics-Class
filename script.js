@@ -1282,7 +1282,7 @@ function renderStudentLessons() {
 <div class="lesson-section">
 
     <h3>
-        Today's Lesson
+        Lesson
     </h3>
 
     <p>
