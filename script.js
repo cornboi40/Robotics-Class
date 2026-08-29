@@ -503,6 +503,10 @@ async function saveLessonToFirebase(
             "Lesson saved to Firebase."
         );
 
+        alert(
+            "Class Saved."
+        );
+
 
         return true;
 
